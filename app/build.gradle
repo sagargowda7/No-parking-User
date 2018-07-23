@@ -8,6 +8,7 @@ android {
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
+        buildToolsVersion '27.0.3'
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -36,8 +37,7 @@ dependencies {
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'de.hdodenhof:circleimageview:2.2.0'
     implementation 'gun0912.ted:tedpermission:2.2.0'
-    implementation 'com.google.zxing:core:3.2.1'
-    implementation 'com.journeyapps:zxing-android-embedded:3.2.0@aar'
+    implementation 'com.journeyapps:zxing-android-embedded:3.6.0'
 }
 
 apply plugin: 'com.google.gms.google-services'
