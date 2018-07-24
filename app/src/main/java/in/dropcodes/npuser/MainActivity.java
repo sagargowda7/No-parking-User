@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
                     mainModels.add(model);
                 }
                 adapter = new MainAdapter(MainActivity.this,mainModels);
+                adapter.notifyDataSetChanged();
                 mRecycler.setAdapter(adapter);
                 progressDialog.dismiss();
 

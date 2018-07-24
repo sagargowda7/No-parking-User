@@ -1,5 +1,7 @@
 package in.dropcodes.npuser;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -24,13 +26,20 @@ public class ParkingDetailsActivity extends AppCompatActivity {
 
     public String uid;
     public CircleImageView mImage;
-    public TextView mName,mPlace,mParking,mAvaParking;
-    public Button mScan;
+    public TextView mName, mPlace, mCar, mBike, mAvaCar, mAvaBike;
+    public Button mCheckIn, mCheckOut;
     public RadioGroup mRadioCheckGroup;
     public RadioButton mRadioCheckButton;
     public FirebaseDatabase mDatabse;
     public DatabaseReference mReference;
-    public int filledInt,total;
+    private String child;
+
+    public void CheckScan(View view) {
+        int radioCheckId = mRadioCheckGroup.getCheckedRadioButtonId();
+        mRadioCheckButton = findViewById(radioCheckId);
+        child = mRadioCheckButton.getText().toString();
+        Snackbar.make(view, "You have selected:" + mRadioCheckButton.getText(), Snackbar.LENGTH_LONG).show();
+    }
 
 
     @Override
@@ -39,7 +48,7 @@ public class ParkingDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_parking_details);
 
         //Bundles
-        Bundle bundle =getIntent().getExtras();
+        Bundle bundle = getIntent().getExtras();
         uid = bundle.getString("uid");
 
         //FireBase
@@ -48,17 +57,16 @@ public class ParkingDetailsActivity extends AppCompatActivity {
 
         //Initialization
         mImage = findViewById(R.id.pd_iamge);
-        mName =findViewById(R.id.pd_name);
+        mName = findViewById(R.id.pd_name);
         mPlace = findViewById(R.id.pd_place);
-        mParking = findViewById(R.id.pd_parking);
-        mAvaParking =findViewById(R.id.pd_ava);
-        mScan =findViewById(R.id.pd_qr);
-        mRadioCheckGroup =findViewById(R.id.radio_group_check);
+        mCar = findViewById(R.id.pd_car);
+        mBike = findViewById(R.id.pd_bike);
+        mAvaCar = findViewById(R.id.pd_ava_car);
+        mAvaBike = findViewById(R.id.pd_ava_bike);
+        mCheckIn = findViewById(R.id.pd_check_in);
+        mCheckOut = findViewById(R.id.pd_check_out);
+        mRadioCheckGroup = findViewById(R.id.radio_group);
 
-
-        //RadioButton for Check In and check Out
-        int radioCheckId = mRadioCheckGroup.getCheckedRadioButtonId();
-        mRadioCheckButton = findViewById(radioCheckId);
 
 
         //FireBaseReference
@@ -66,28 +74,23 @@ public class ParkingDetailsActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                String name =dataSnapshot.child("name").getValue().toString();
+                String name = dataSnapshot.child("name").getValue().toString();
                 String place = dataSnapshot.child("area").getValue().toString();
-                String Total = dataSnapshot.child("total").getValue().toString();
+                String car = dataSnapshot.child("car").getValue().toString();
+                String bike = dataSnapshot.child("bike").getValue().toString();
+                String Avacar = dataSnapshot.child("carPark").getValue().toString();
+                String Avabike = dataSnapshot.child("bikePark").getValue().toString();
                 String image = dataSnapshot.child("image").getValue().toString();
-                String filled = dataSnapshot.child("filled").getValue().toString();
 
 
-                mName.setText("Parking place: "+name);
-                mPlace.setText("Address: "+place);
-                mParking.setText("Total Car parking provided: "+Total);
+                mName.setText("Parking place: " + name);
+                mPlace.setText("Address: " + place);
+                mCar.setText("Total Car parking provided: " + Avacar);
+                mBike.setText("Total Bike parking provided: " + Avabike);
+                mAvaCar.setText("Available Car parking: " + car);
+                mAvaBike.setText("Available Bike parking: " + bike);
+
                 Picasso.get().load(image).fit().centerInside().placeholder(R.drawable.loadingimg).into(mImage);
-
-                //converting String to integer
-                total =Integer.parseInt(Total);
-                filledInt = Integer.parseInt(filled);
-
-
-                int AvaParking = total - filledInt;
-
-                //Converting Int to String
-                String avaPaking = String.valueOf(AvaParking);
-                mAvaParking.setText("Available Bike parking: "+avaPaking);
 
             }
 
@@ -98,20 +101,30 @@ public class ParkingDetailsActivity extends AppCompatActivity {
             }
         });
 
-        mScan.setOnClickListener(new View.OnClickListener() {
+        //Radio button
+        int radioCheckId = mRadioCheckGroup.getCheckedRadioButtonId();
+        mRadioCheckButton = findViewById(radioCheckId);
+        child = mRadioCheckButton.getText().toString();
+
+        mCheckIn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent ci = new Intent(ParkingDetailsActivity.this,CheckInActivity.class);
+                ci.putExtra("uid",uid);
+                ci.putExtra("child",child);
+                startActivity(ci);
+
+            }
+        });
+
+        mCheckOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
 
             }
         });
-    }
-
-    public void CheckScan(View view) {
-        int radioCheckId = mRadioCheckGroup.getCheckedRadioButtonId();
-        mRadioCheckButton = findViewById(radioCheckId);
-        Snackbar.make(view,"You have selected:"+mRadioCheckButton.getText(),Snackbar.LENGTH_LONG).show();
-
     }
 
 
