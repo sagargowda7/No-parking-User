@@ -78,8 +78,8 @@ public class ParkingDetailsActivity extends AppCompatActivity {
                 String place = dataSnapshot.child("area").getValue().toString();
                 String car = dataSnapshot.child("car").getValue().toString();
                 String bike = dataSnapshot.child("bike").getValue().toString();
-                String Avacar = dataSnapshot.child("carPark").getValue().toString();
-                String Avabike = dataSnapshot.child("bikePark").getValue().toString();
+                String Avacar = dataSnapshot.child("car_total").getValue().toString();
+                String Avabike = dataSnapshot.child("bike_total").getValue().toString();
                 String image = dataSnapshot.child("image").getValue().toString();
 
 
@@ -122,6 +122,10 @@ public class ParkingDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
+                Intent intent = new Intent(ParkingDetailsActivity.this,CheckOutActivity.class);
+                intent.putExtra("uid",uid);
+                intent.putExtra("child",child);
+                startActivity(intent);
 
             }
         });

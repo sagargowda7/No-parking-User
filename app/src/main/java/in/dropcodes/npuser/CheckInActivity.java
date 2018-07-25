@@ -38,13 +38,6 @@ public class CheckInActivity extends AppCompatActivity implements ZXingScannerVi
         child = bundle.getString("child");
         Toast.makeText(this, child, Toast.LENGTH_LONG).show();
 
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_check_in);
-
         zXingScannerView = new ZXingScannerView(getApplicationContext());
         setContentView(zXingScannerView);
         zXingScannerView.setResultHandler(this);

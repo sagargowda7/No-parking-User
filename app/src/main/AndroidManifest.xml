@@ -29,7 +29,8 @@
             android:screenOrientation="fullSensor"
             tools:replace="screenOrientation" />
         <activity android:name=".ParkingDetailsActivity" />
-        <activity android:name=".CheckInActivity"></activity>
+        <activity android:name=".CheckInActivity" />
+        <activity android:name=".CheckOutActivity"></activity>
     </application>
 
 </manifest>
