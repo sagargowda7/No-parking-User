@@ -2,9 +2,14 @@ package in.dropcodes.npuser;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -63,51 +68,58 @@ public class ParkingDetailsActivity extends AppCompatActivity {
         mProgressDialog.setMessage("Please wait...");
         mProgressDialog.show();
 
-        //FireBaseReference
-        mReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                String name = dataSnapshot.child("name").getValue().toString();
-                String place = dataSnapshot.child("area").getValue().toString();
-                Total = dataSnapshot.child("total").getValue().toString();
-                Park = dataSnapshot.child("parked").getValue().toString();
-                String image = dataSnapshot.child("image").getValue().toString();
+        //Checking Network Exist
+        if(!isConnected(ParkingDetailsActivity.this)) builderDialog(ParkingDetailsActivity.this).show();
+        else {
 
+            //FireBaseReference
+            mReference.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                mName.setText("Parking place: " + name);
-                mPlace.setText("Address: " + place);
-                mTotal.setText("Total parking provided: " + Total);
-                mPark.setText("Available parking place: " + Park);
-                Picasso.get().load(image).fit().centerInside().placeholder(R.drawable.loadingimg).into(mImage);
+                    String name = dataSnapshot.child("name").getValue().toString();
+                    String place = dataSnapshot.child("area").getValue().toString();
+                    Total = dataSnapshot.child("total").getValue().toString();
+                    Park = dataSnapshot.child("parked").getValue().toString();
+                    String image = dataSnapshot.child("image").getValue().toString();
 
 
-                if (Park.equals(Total)){
+                    mName.setText("Parking Name: " + name);
+                    mPlace.setText("Address: " + place);
+                    mTotal.setText("Total parking provided: " + Total);
+                    mPark.setText(" "+ Park);
+                    Picasso.get().load(image).fit().centerInside().placeholder(R.drawable.loadingimg).into(mImage);
 
-                    mCheckOut.setVisibility(View.INVISIBLE);
-                }else {
 
-                    mCheckOut.setVisibility(View.VISIBLE);
+                    //Making Check Out Button InVisible
+                    if (Park.equals(Total)){
+                        mCheckOut.setVisibility(View.INVISIBLE);
+                    }else {
+                        mCheckOut.setVisibility(View.VISIBLE);
+                    }
+                    //Making Check In Button InVisible
+                    if (Park.equals("0")){
+                        mCheckIn.setVisibility(View.INVISIBLE);
+                    }else {
+                        mCheckIn.setVisibility(View.VISIBLE);
+                    }
 
+
+
+                    mProgressDialog.dismiss();
                 }
-                if (Park.equals("0")){
-                    mCheckIn.setVisibility(View.INVISIBLE);
-                }else {
-                    mCheckIn.setVisibility(View.VISIBLE);
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    Toast.makeText(ParkingDetailsActivity.this, "There  was some error Please Check your Internet connection", Toast.LENGTH_SHORT).show();
+                    mProgressDialog.hide();
                 }
+            });
 
 
-
-                mProgressDialog.dismiss();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                Toast.makeText(ParkingDetailsActivity.this, "There  was some error Please Check your Internet connection", Toast.LENGTH_SHORT).show();
-                mProgressDialog.hide();
-            }
-        });
+        }
 
         mCheckIn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -131,6 +143,35 @@ public class ParkingDetailsActivity extends AppCompatActivity {
             }
         });
     }
+
+
+    public boolean isConnected(Context context){
+
+        ConnectivityManager cm =(ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+
+        if(networkInfo != null && networkInfo.isConnected()){
+            android.net.NetworkInfo wifi = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+            android.net.NetworkInfo mobile = cm.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+
+            return (mobile != null && mobile.isConnectedOrConnecting()) || (wifi != null && wifi.isConnectedOrConnecting());
+        }else return false;
+    }
+    public AlertDialog.Builder builderDialog (Context c){
+        AlertDialog.Builder builder = new AlertDialog.Builder(c);
+        builder.setTitle("No Internet Connection");
+        builder.setCancelable(false);
+        builder.setMessage("You need to have Mobile Data or WiFi Connection");
+        builder.setPositiveButton("EXIT", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+            }
+        });
+        return builder;
+    }
+
+
 
     @Override
     public void onBackPressed() {

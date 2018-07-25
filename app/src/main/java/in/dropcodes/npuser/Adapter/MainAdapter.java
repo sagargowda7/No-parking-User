@@ -40,8 +40,8 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder>{
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
         final MainModel model = mainModels.get(position);
-        holder.mName.setText("Parking Name:"+""+model.getName());
-        holder.mPlace.setText("Parking Area:"+""+model.getArea());
+        holder.mName.setText("Parking Name:"+" "+model.getName());
+        holder.mPlace.setText("Parking Area:"+" "+model.getArea());
         //Loading Image
         Picasso.get().load(model.getImage()).fit().centerInside().placeholder(R.drawable.loadingimg).into(holder.mImage);
         final String uid = model.getUid();

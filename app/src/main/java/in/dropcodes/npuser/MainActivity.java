@@ -1,7 +1,11 @@
 package in.dropcodes.npuser;
 
+import android.Manifest;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -36,20 +40,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-        final PermissionListener permissionListener = new PermissionListener() {
-            @Override
-            public void onPermissionGranted() {
-
-            }
-
-            @Override
-            public void onPermissionDenied(ArrayList<String> deniedPermissions) {
-                Toast.makeText(MainActivity.this, "Please allow permission", Toast.LENGTH_LONG).show();
-            }
-        };
-
-
         mRecycler = findViewById(R.id.recycler_view);
         mRecycler.setHasFixedSize(true);
         mRecycler.setLayoutManager(new LinearLayoutManager(this));
@@ -62,29 +52,62 @@ public class MainActivity extends AppCompatActivity {
         progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.show();
 
-        mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("parking");
-        mDatabaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+        //Checking Network Exist
+        if(!isConnected(MainActivity.this)) builderDialog(MainActivity.this).show();
+        else {
 
-                for (DataSnapshot parkingsnapshot : dataSnapshot.getChildren()){
-                    MainModel model = parkingsnapshot.getValue(MainModel.class);
-                    mainModels.add(model);
+            mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("parking");
+            mDatabaseReference.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                    for (DataSnapshot parkingsnapshot : dataSnapshot.getChildren()){
+                        MainModel model = parkingsnapshot.getValue(MainModel.class);
+                        mainModels.add(model);
+                    }
+                    adapter = new MainAdapter(MainActivity.this,mainModels);
+                    adapter.notifyDataSetChanged();
+                    mRecycler.setAdapter(adapter);
+                    progressDialog.dismiss();
+
                 }
-                adapter = new MainAdapter(MainActivity.this,mainModels);
-                adapter.notifyDataSetChanged();
-                mRecycler.setAdapter(adapter);
-                progressDialog.dismiss();
 
-            }
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    Toast.makeText(MainActivity.this, "Error while fetching data. Please check your internet connection", Toast.LENGTH_LONG).show();
+                    progressDialog.hide();
+                }
+            });
 
+        }
+    }
+
+    public boolean isConnected(Context context){
+
+        ConnectivityManager cm =(ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+
+        if(networkInfo != null && networkInfo.isConnected()){
+            android.net.NetworkInfo wifi = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+            android.net.NetworkInfo mobile = cm.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+
+            return (mobile != null && mobile.isConnectedOrConnecting()) || (wifi != null && wifi.isConnectedOrConnecting());
+        }else return false;
+    }
+    public AlertDialog.Builder builderDialog (Context c){
+        AlertDialog.Builder builder = new AlertDialog.Builder(c);
+        builder.setTitle("No Internet Connection");
+        builder.setCancelable(false);
+        builder.setMessage("You need to have Mobile Data or WiFi Connection");
+        builder.setPositiveButton("EXIT", new DialogInterface.OnClickListener() {
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(MainActivity.this, "Error while fetching data. Please check your internet connection", Toast.LENGTH_LONG).show();
-                progressDialog.hide();
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
             }
         });
+        return builder;
     }
+
 
     @Override
     public void onBackPressed() {
