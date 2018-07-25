@@ -24,7 +24,7 @@ import static android.widget.Toast.*;
 public class CheckInActivity extends AppCompatActivity implements ZXingScannerView.ResultHandler{
 
     public ZXingScannerView zXingScannerView;
-    public String uid,child;
+    public String uid;
     public FirebaseDatabase mDatabase;
     public DatabaseReference mReference;
     public String value;
@@ -35,8 +35,6 @@ public class CheckInActivity extends AppCompatActivity implements ZXingScannerVi
 
         Bundle bundle = getIntent().getExtras();
         uid = bundle.getString("uid");
-        child = bundle.getString("child");
-        Toast.makeText(this, child, Toast.LENGTH_LONG).show();
 
         zXingScannerView = new ZXingScannerView(getApplicationContext());
         setContentView(zXingScannerView);
@@ -66,19 +64,21 @@ public class CheckInActivity extends AppCompatActivity implements ZXingScannerVi
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                    value = dataSnapshot.child(child).getValue().toString();
+                    value = dataSnapshot.child("parked").getValue().toString();
                     Toast.makeText(CheckInActivity.this, value, Toast.LENGTH_SHORT).show();
 
                     int vValue =Integer.parseInt(value);
                     int vFinal = vValue - 1;
                     String fin = String.valueOf(vFinal);
-                    mReference.child(child).setValue(fin);
+                    mReference.child("parked").setValue(fin);
                     finish();
 
                 }
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    Toast.makeText(CheckInActivity.this,"There was some error ",Toast.LENGTH_LONG).show();
 
                 }
             });

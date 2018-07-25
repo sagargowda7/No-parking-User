@@ -17,7 +17,7 @@ import me.dm7.barcodescanner.zxing.ZXingScannerView;
 public class CheckOutActivity extends AppCompatActivity implements ZXingScannerView.ResultHandler{
 
     public ZXingScannerView ScannerView;
-    public String uid , child;
+    public String uid ;
     public FirebaseDatabase mDatabaseR;
     public DatabaseReference mReferenceR;
     public String values;
@@ -29,8 +29,6 @@ public class CheckOutActivity extends AppCompatActivity implements ZXingScannerV
 
         Bundle bundl = getIntent().getExtras();
         uid = bundl.getString("uid");
-        child = bundl.getString("child");
-        Toast.makeText(this, child, Toast.LENGTH_LONG).show();
 
         ScannerView = new ZXingScannerView(getApplicationContext());
         setContentView(ScannerView);
@@ -62,13 +60,13 @@ public class CheckOutActivity extends AppCompatActivity implements ZXingScannerV
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                    values = dataSnapshot.child(child).getValue().toString();
+                    values = dataSnapshot.child("parked").getValue().toString();
                     Toast.makeText(CheckOutActivity.this, values, Toast.LENGTH_SHORT).show();
 
                     int v =Integer.parseInt(values);
                     int vFinal = v + 1;
                     String fin = String.valueOf(vFinal);
-                    mReferenceR.child(child).setValue(fin);
+                    mReferenceR.child("parked").setValue(fin);
                     finish();
 
                 }

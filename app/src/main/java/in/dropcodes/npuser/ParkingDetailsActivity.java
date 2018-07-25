@@ -1,6 +1,7 @@
 package in.dropcodes.npuser;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -26,21 +27,12 @@ public class ParkingDetailsActivity extends AppCompatActivity {
 
     public String uid;
     public CircleImageView mImage;
-    public TextView mName, mPlace, mCar, mBike, mAvaCar, mAvaBike;
+    public TextView mName, mPlace,mTotal, mPark;
     public Button mCheckIn, mCheckOut;
-    public RadioGroup mRadioCheckGroup;
-    public RadioButton mRadioCheckButton;
     public FirebaseDatabase mDatabse;
     public DatabaseReference mReference;
-    private String child;
-
-    public void CheckScan(View view) {
-        int radioCheckId = mRadioCheckGroup.getCheckedRadioButtonId();
-        mRadioCheckButton = findViewById(radioCheckId);
-        child = mRadioCheckButton.getText().toString();
-        Snackbar.make(view, "You have selected:" + mRadioCheckButton.getText(), Snackbar.LENGTH_LONG).show();
-    }
-
+    private String Total,Park;
+    public ProgressDialog mProgressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,15 +51,17 @@ public class ParkingDetailsActivity extends AppCompatActivity {
         mImage = findViewById(R.id.pd_iamge);
         mName = findViewById(R.id.pd_name);
         mPlace = findViewById(R.id.pd_place);
-        mCar = findViewById(R.id.pd_car);
-        mBike = findViewById(R.id.pd_bike);
-        mAvaCar = findViewById(R.id.pd_ava_car);
-        mAvaBike = findViewById(R.id.pd_ava_bike);
+        mTotal = findViewById(R.id.pd_total);
+        mPark = findViewById(R.id.pd_park);
         mCheckIn = findViewById(R.id.pd_check_in);
         mCheckOut = findViewById(R.id.pd_check_out);
-        mRadioCheckGroup = findViewById(R.id.radio_group);
 
-
+        //ProgressDialog
+        mProgressDialog = new ProgressDialog(ParkingDetailsActivity.this);
+        mProgressDialog.setCanceledOnTouchOutside(false);
+        mProgressDialog.setTitle("Fetching data");
+        mProgressDialog.setMessage("Please wait...");
+        mProgressDialog.show();
 
         //FireBaseReference
         mReference.addValueEventListener(new ValueEventListener() {
@@ -76,35 +70,44 @@ public class ParkingDetailsActivity extends AppCompatActivity {
 
                 String name = dataSnapshot.child("name").getValue().toString();
                 String place = dataSnapshot.child("area").getValue().toString();
-                String car = dataSnapshot.child("car").getValue().toString();
-                String bike = dataSnapshot.child("bike").getValue().toString();
-                String Avacar = dataSnapshot.child("car_total").getValue().toString();
-                String Avabike = dataSnapshot.child("bike_total").getValue().toString();
+                Total = dataSnapshot.child("total").getValue().toString();
+                Park = dataSnapshot.child("parked").getValue().toString();
                 String image = dataSnapshot.child("image").getValue().toString();
 
 
                 mName.setText("Parking place: " + name);
                 mPlace.setText("Address: " + place);
-                mCar.setText("Total Car parking provided: " + Avacar);
-                mBike.setText("Total Bike parking provided: " + Avabike);
-                mAvaCar.setText("Available Car parking: " + car);
-                mAvaBike.setText("Available Bike parking: " + bike);
-
+                mTotal.setText("Total parking provided: " + Total);
+                mPark.setText("Available parking place: " + Park);
                 Picasso.get().load(image).fit().centerInside().placeholder(R.drawable.loadingimg).into(mImage);
 
+
+                if (Park.equals(Total)){
+
+                    mCheckOut.setVisibility(View.INVISIBLE);
+                }else {
+
+                    mCheckOut.setVisibility(View.VISIBLE);
+
+                }
+                if (Park.equals("0")){
+                    mCheckIn.setVisibility(View.INVISIBLE);
+                }else {
+                    mCheckIn.setVisibility(View.VISIBLE);
+                }
+
+
+
+                mProgressDialog.dismiss();
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
                 Toast.makeText(ParkingDetailsActivity.this, "There  was some error Please Check your Internet connection", Toast.LENGTH_SHORT).show();
+                mProgressDialog.hide();
             }
         });
-
-        //Radio button
-        int radioCheckId = mRadioCheckGroup.getCheckedRadioButtonId();
-        mRadioCheckButton = findViewById(radioCheckId);
-        child = mRadioCheckButton.getText().toString();
 
         mCheckIn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,7 +115,6 @@ public class ParkingDetailsActivity extends AppCompatActivity {
 
                 Intent ci = new Intent(ParkingDetailsActivity.this,CheckInActivity.class);
                 ci.putExtra("uid",uid);
-                ci.putExtra("child",child);
                 startActivity(ci);
 
             }
@@ -124,13 +126,17 @@ public class ParkingDetailsActivity extends AppCompatActivity {
 
                 Intent intent = new Intent(ParkingDetailsActivity.this,CheckOutActivity.class);
                 intent.putExtra("uid",uid);
-                intent.putExtra("child",child);
                 startActivity(intent);
 
             }
         });
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
 
+        finish();
 
+    }
 }
