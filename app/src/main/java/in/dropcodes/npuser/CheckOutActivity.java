@@ -65,9 +65,9 @@ public class CheckOutActivity extends AppCompatActivity implements ZXingScannerV
                     values = dataSnapshot.child(child).getValue().toString();
                     Toast.makeText(CheckOutActivity.this, values, Toast.LENGTH_SHORT).show();
 
-                    int vv =Integer.parseInt(values);
-                    int vvv = vv + 1;
-                    String fin = String.valueOf(vvv);
+                    int v =Integer.parseInt(values);
+                    int vFinal = v + 1;
+                    String fin = String.valueOf(vFinal);
                     mReferenceR.child(child).setValue(fin);
                     finish();
 

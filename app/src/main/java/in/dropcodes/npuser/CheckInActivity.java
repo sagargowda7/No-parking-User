@@ -69,9 +69,9 @@ public class CheckInActivity extends AppCompatActivity implements ZXingScannerVi
                     value = dataSnapshot.child(child).getValue().toString();
                     Toast.makeText(CheckInActivity.this, value, Toast.LENGTH_SHORT).show();
 
-                    int vv =Integer.parseInt(value);
-                    int vvv = vv - 1;
-                    String fin = String.valueOf(vvv);
+                    int vValue =Integer.parseInt(value);
+                    int vFinal = vValue - 1;
+                    String fin = String.valueOf(vFinal);
                     mReference.child(child).setValue(fin);
                     finish();
 
