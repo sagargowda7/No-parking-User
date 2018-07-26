@@ -22,7 +22,7 @@
         android:fontFamily="@font/nunito_bold"
         android:gravity="center"
         android:text="NO PARKING"
-        android:textColor="@color/white"
+        android:textColor="@color/colorAccent"
         android:textSize="18dp" />
 
 

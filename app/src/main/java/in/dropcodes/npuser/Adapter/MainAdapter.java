@@ -43,7 +43,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder>{
         holder.mName.setText("Parking Name:"+" "+model.getName());
         holder.mPlace.setText("Parking Area:"+" "+model.getArea());
         //Loading Image
-        Picasso.get().load(model.getImage()).fit().centerInside().placeholder(R.drawable.loadingimg).into(holder.mImage);
+        Picasso.get().load(model.getImage()).fit().centerInside().placeholder(R.drawable.placeholder).into(holder.mImage);
         final String uid = model.getUid();
         //Handling ItemClick
         holder.mLinearLayout.setOnClickListener(new View.OnClickListener() {

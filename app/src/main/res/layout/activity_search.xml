@@ -33,9 +33,9 @@
         android:layout_marginLeft="10dp"
         android:paddingTop="20dp"
         android:paddingBottom="10dp"
-        android:hint="Name"
+        android:hint="search parking name"
         android:textColor="@color/white"
-        android:textColorHint="@color/white"
+        android:textColorHint="@color/gray"
         android:textStyle="normal" />
 
     <ImageButton

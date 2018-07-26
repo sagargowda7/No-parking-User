@@ -25,7 +25,7 @@
             android:layout_width="80dp"
             android:id="@+id/parking_image"
             android:background="@color/colorPrimaryDark"
-            android:src="@drawable/loadingimg"
+            android:src="@drawable/placeholder"
             android:layout_margin="5dp"
             android:layout_height="80dp" />
 

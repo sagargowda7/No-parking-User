@@ -36,10 +36,10 @@
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
 
-        <activity android:name=".SearchActivity"
-            android:theme="@style/AppThemeNO">
-
-        </activity>
+        <activity
+            android:name=".SearchActivity"
+            android:theme="@style/AppThemeNO"></activity>
+        <activity android:name=".DeveloperActivity"></activity>
     </application>
 
 </manifest>

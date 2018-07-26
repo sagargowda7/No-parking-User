@@ -62,6 +62,7 @@ public class ParkingDetailsActivity extends AppCompatActivity {
         mProgressDialog.setCanceledOnTouchOutside(false);
         mProgressDialog.setTitle("Fetching data");
         mProgressDialog.setMessage("Please wait...");
+        mProgressDialog.setIcon(R.mipmap.ic_launcher_foreground);
         mProgressDialog.show();
 
 
@@ -85,7 +86,7 @@ public class ParkingDetailsActivity extends AppCompatActivity {
                     mPlace.setText("Address: " + place);
                     mTotal.setText("Total parking provided: " + Total);
                     mPark.setText(" "+ Park);
-                    Picasso.get().load(image).fit().centerInside().placeholder(R.drawable.loadingimg).into(mImage);
+                    Picasso.get().load(image).fit().centerInside().placeholder(R.drawable.placeholder).into(mImage);
 
 
                     //Making Check Out Button InVisible

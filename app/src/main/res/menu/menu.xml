@@ -8,4 +8,10 @@
         android:title="Search"
         app:showAsAction="always"/>
 
+    <item
+        android:id="@+id/smenu_dev"
+        android:title="Developer" />
+
+
+
 </menu>

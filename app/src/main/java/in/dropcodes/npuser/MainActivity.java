@@ -16,8 +16,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.webkit.WebView;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -118,6 +121,12 @@ public class MainActivity extends AppCompatActivity {
 
              Intent in = new Intent(MainActivity.this,SearchActivity.class);
              startActivity(in);
+         }
+
+         if(item.getItemId() == R.id.smenu_dev){
+
+             Intent ii = new Intent(MainActivity.this,DeveloperActivity.class);
+             startActivity(ii);
          }
         return true;
 }
