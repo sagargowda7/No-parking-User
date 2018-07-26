@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -15,6 +16,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -57,21 +60,21 @@ public class MainActivity extends AppCompatActivity {
 
         //Camera Permission
 
-        if(ContextCompat.checkSelfPermission(MainActivity.this,Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
+        if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
 
-            if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this,Manifest.permission.CAMERA)){
+            if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this, Manifest.permission.CAMERA)) {
 
-            }else {
+            } else {
 
                 ActivityCompat.requestPermissions(MainActivity.this,
-                        new String[]{Manifest.permission.CAMERA},1);
+                        new String[]{Manifest.permission.CAMERA}, 1);
             }
-        }else {
+        } else {
 
         }
 
         //Checking Network Exist
-        if(!isConnected(MainActivity.this)) builderDialog(MainActivity.this).show();
+        if (!isConnected(MainActivity.this)) builderDialog(MainActivity.this).show();
         else {
 
             mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("parking");
@@ -79,11 +82,11 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                    for (DataSnapshot parkingsnapshot : dataSnapshot.getChildren()){
+                    for (DataSnapshot parkingsnapshot : dataSnapshot.getChildren()) {
                         MainModel model = parkingsnapshot.getValue(MainModel.class);
                         mainModels.add(model);
                     }
-                    adapter = new MainAdapter(MainActivity.this,mainModels);
+                    adapter = new MainAdapter(MainActivity.this, mainModels);
                     adapter.notifyDataSetChanged();
                     mRecycler.setAdapter(adapter);
                     progressDialog.dismiss();
@@ -99,6 +102,25 @@ public class MainActivity extends AppCompatActivity {
 
         }
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+         super.onOptionsItemSelected(item);
+
+         if(item.getItemId() == R.id.app_bar_search) {
+
+             Intent in = new Intent(MainActivity.this,SearchActivity.class);
+             startActivity(in);
+         }
+        return true;
+}
 
     public boolean isConnected(Context context){
 

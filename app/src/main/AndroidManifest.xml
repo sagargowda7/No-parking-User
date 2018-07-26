@@ -30,11 +30,16 @@
             tools:replace="screenOrientation" />
         <activity android:name=".ParkingDetailsActivity" />
         <activity android:name=".CheckInActivity" />
-        <activity android:name=".CheckOutActivity"></activity>
+        <activity android:name=".CheckOutActivity" />
 
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
+
+        <activity android:name=".SearchActivity"
+            android:theme="@style/AppThemeNO">
+
+        </activity>
     </application>
 
 </manifest>

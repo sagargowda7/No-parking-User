@@ -61,12 +61,12 @@ public class CheckOutActivity extends AppCompatActivity implements ZXingScannerV
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                     values = dataSnapshot.child("parked").getValue().toString();
-                    Toast.makeText(CheckOutActivity.this, values, Toast.LENGTH_SHORT).show();
 
                     int v =Integer.parseInt(values);
                     int vFinal = v + 1;
                     String fin = String.valueOf(vFinal);
                     mReferenceR.child("parked").setValue(fin);
+                    Toast.makeText(CheckOutActivity.this, "You are checked out", Toast.LENGTH_SHORT).show();
                     finish();
 
                 }
