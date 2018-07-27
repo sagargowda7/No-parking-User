@@ -29,11 +29,10 @@
         android:ems="10"
         android:fontFamily="@font/nunito"
         android:inputType="textPersonName"
-        android:padding="10dp"
+        android:padding="15dp"
         android:layout_marginLeft="10dp"
         android:paddingTop="20dp"
-        android:paddingBottom="10dp"
-        android:hint="search parking name"
+        android:hint="Search parking name"
         android:textColor="@color/white"
         android:textColorHint="@color/gray"
         android:textStyle="normal" />

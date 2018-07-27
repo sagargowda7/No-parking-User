@@ -19,8 +19,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.webkit.WebView;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -28,9 +26,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.gun0912.tedpermission.PermissionListener;
-import com.gun0912.tedpermission.TedPermission;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -115,22 +110,22 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-         super.onOptionsItemSelected(item);
+        super.onOptionsItemSelected(item);
 
-         if(item.getItemId() == R.id.app_bar_search) {
+        if (item.getItemId() == R.id.app_bar_search) {
 
-             Intent in = new Intent(MainActivity.this,SearchActivity.class);
-             startActivity(in);
-         }
+            Intent in = new Intent(MainActivity.this, SearchActivity.class);
+            startActivity(in);
+        }
 
-         if(item.getItemId() == R.id.smenu_dev){
+        if (item.getItemId() == R.id.menu_settings) {
 
-             Intent ii = new Intent(MainActivity.this,DeveloperActivity.class);
-             startActivity(ii);
-         }
+            Intent ii = new Intent(MainActivity.this, DeveloperActivity.class);
+            startActivity(ii);
+        }
         return true;
-}
 
+}
     public boolean isConnected(Context context){
 
         ConnectivityManager cm =(ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
