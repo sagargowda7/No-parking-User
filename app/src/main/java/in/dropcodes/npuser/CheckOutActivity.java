@@ -82,6 +82,7 @@ public class CheckOutActivity extends AppCompatActivity implements ZXingScannerV
             mUserRef.child("check_out_time").setValue(totalTime);
 
 
+            //FireBase
             mReferenceR.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
