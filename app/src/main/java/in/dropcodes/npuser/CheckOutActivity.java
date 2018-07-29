@@ -1,16 +1,22 @@
 package in.dropcodes.npuser;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.google.zxing.Result;
+
+import java.text.SimpleDateFormat;
 
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
@@ -67,7 +73,6 @@ public class CheckOutActivity extends AppCompatActivity implements ZXingScannerV
                     String fin = String.valueOf(vFinal);
                     mReferenceR.child("parked").setValue(fin);
                     Toast.makeText(CheckOutActivity.this, "You are checked out", Toast.LENGTH_SHORT).show();
-                    finish();
 
                 }
 
@@ -76,6 +81,12 @@ public class CheckOutActivity extends AppCompatActivity implements ZXingScannerV
 
                 }
             });
+
+            Intent intent = new Intent(CheckOutActivity.this,PaymentActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            finish();
+
 
         }
 

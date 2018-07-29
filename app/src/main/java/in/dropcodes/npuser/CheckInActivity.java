@@ -5,17 +5,22 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
 import com.google.zxing.qrcode.encoder.QRCode;
 
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
@@ -26,8 +31,10 @@ public class CheckInActivity extends AppCompatActivity implements ZXingScannerVi
     public ZXingScannerView zXingScannerView;
     public String uid;
     public FirebaseDatabase mDatabase;
-    public DatabaseReference mReference;
-    public String value;
+    public DatabaseReference mReference,mUserRef;
+    public String value,UserUID;
+    public FirebaseAuth mAuth;
+    public FirebaseUser mUser;
     @Override
     protected void onStart() {
         super.onStart();
@@ -58,7 +65,26 @@ public class CheckInActivity extends AppCompatActivity implements ZXingScannerVi
 
             mDatabase = FirebaseDatabase.getInstance();
             mReference = mDatabase.getReference().child("parking").child(uid);
+            mAuth = FirebaseAuth.getInstance();
+            mUser = mAuth.getCurrentUser();
+            UserUID = mUser.getUid();
+            mUserRef = mReference.child("record").child(UserUID);
 
+            //GetCurrentTime
+            long current_time = System.currentTimeMillis();
+            SimpleDateFormat sdfMin = new SimpleDateFormat("mm");
+            SimpleDateFormat sdfHrs = new SimpleDateFormat("hh");
+            String minString = sdfMin.format(current_time);
+            String HrsString = sdfHrs.format(current_time);
+            int minInt = Integer.parseInt(minString);
+            int hrsInt = Integer.parseInt(HrsString);
+
+            //Converting Hrs to Min
+            int HrsToMin = hrsInt * 60;
+            int totalTime = minInt+ HrsToMin;
+
+
+            mUserRef.child("check_in_time").setValue(totalTime);
 
             mReference.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override

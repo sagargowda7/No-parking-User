@@ -58,6 +58,14 @@
 
     </LinearLayout>
 
+    <Button
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_background_orange"
+        android:text="LOG OUT"
+        android:textColor="@color/white"
+        android:onClick="logout"/>
+
 
 
 </LinearLayout>
