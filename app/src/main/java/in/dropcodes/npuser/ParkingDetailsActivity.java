@@ -98,11 +98,10 @@ public class ParkingDetailsActivity extends AppCompatActivity {
                     //Making Check In Button InVisible
                     if (Park.equals("0")){
                         mCheckIn.setVisibility(View.INVISIBLE);
+                        mPark.setText("0");
                     }else {
                         mCheckIn.setVisibility(View.VISIBLE);
                     }
-
-
 
                     mProgressDialog.dismiss();
                 }

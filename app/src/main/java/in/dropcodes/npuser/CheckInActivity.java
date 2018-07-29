@@ -1,5 +1,6 @@
 package in.dropcodes.npuser;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -82,8 +83,6 @@ public class CheckInActivity extends AppCompatActivity implements ZXingScannerVi
             //Converting Hrs to Min
             int HrsToMin = hrsInt * 60;
             int totalTime = minInt+ HrsToMin;
-
-
             mUserRef.child("check_in_time").setValue(totalTime);
 
             mReference.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -107,6 +106,10 @@ public class CheckInActivity extends AppCompatActivity implements ZXingScannerVi
 
                 }
             });
+
+            Intent intent =new Intent(CheckInActivity.this,MainActivity.class);
+            startActivity(intent);
+            finish();
 
         }
 

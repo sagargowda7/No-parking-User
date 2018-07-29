@@ -25,8 +25,10 @@ public class CheckOutActivity extends AppCompatActivity implements ZXingScannerV
     public ZXingScannerView ScannerView;
     public String uid ;
     public FirebaseDatabase mDatabaseR;
-    public DatabaseReference mReferenceR;
-    public String values;
+    public DatabaseReference mReferenceR,mUserRef;
+    public String values,UserUID;
+    public FirebaseAuth mAuth;
+    public FirebaseUser mUser;
 
 
     @Override
@@ -60,6 +62,24 @@ public class CheckOutActivity extends AppCompatActivity implements ZXingScannerV
 
             mDatabaseR = FirebaseDatabase.getInstance();
             mReferenceR = mDatabaseR.getReference().child("parking").child(uid);
+            mAuth = FirebaseAuth.getInstance();
+            mUser = mAuth.getCurrentUser();
+            UserUID = mUser.getUid();
+            mUserRef = mReferenceR.child("record").child(UserUID);
+
+            //GetCurrentTime
+            long current_time = System.currentTimeMillis();
+            SimpleDateFormat sdfMin = new SimpleDateFormat("mm");
+            SimpleDateFormat sdfHrs = new SimpleDateFormat("hh");
+            String minString = sdfMin.format(current_time);
+            String HrsString = sdfHrs.format(current_time);
+            int minInt = Integer.parseInt(minString);
+            int hrsInt = Integer.parseInt(HrsString);
+
+            //Converting Hrs to Min
+            int HrsToMin = hrsInt * 60;
+            int totalTime = minInt+ HrsToMin;
+            mUserRef.child("check_out_time").setValue(totalTime);
 
 
             mReferenceR.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -83,7 +103,7 @@ public class CheckOutActivity extends AppCompatActivity implements ZXingScannerV
             });
 
             Intent intent = new Intent(CheckOutActivity.this,PaymentActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.putExtra("uid",uid);
             startActivity(intent);
             finish();
 

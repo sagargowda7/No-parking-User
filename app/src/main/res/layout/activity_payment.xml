@@ -1,9 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".PaymentActivity">
 
-</android.support.constraint.ConstraintLayout>
+    <pl.droidsonroids.gif.GifImageView
+        android:layout_width="300dp"
+        android:layout_height="230dp"
+        android:background="@drawable/tick"
+        android:id="@+id/gif"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/gif"
+        android:layout_margin="10dp"
+        android:text="Payment Successful"
+        android:gravity="center"
+        android:textAllCaps="true"
+        android:fontFamily="@font/nunito_bold"
+        android:textColor="@color/orange"
+        android:textSize="16dp"
+        android:id="@+id/txt"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/txt"
+        android:layout_margin="10dp"
+        android:fontFamily="@font/nunito"
+        android:text="Your car was parked for "
+        android:textSize="20dp"
+        android:textColor="@color/gray"
+        android:gravity="center"
+        android:id="@+id/parking_time" />
+
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="40rs "
+            android:gravity="center"
+            android:layout_below="@id/parking_time"
+            android:fontFamily="@font/nunito_bold"
+            android:id="@+id/charge"
+            android:textColor="@color/orange"
+            android:textSize="22dp"/>
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/charge"
+        android:layout_margin="20dp"
+        android:textSize="20dp"
+        android:gravity="center"
+        android:textColor="@color/orange"
+        android:fontFamily="@font/nunito"
+        android:textAllCaps="true"
+        android:text="Thank for Using No Parking"/>
+
+
+
+</RelativeLayout>

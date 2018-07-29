@@ -40,6 +40,8 @@ public class SearchActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
+
+        getSupportActionBar().setTitle("Search Parking Place");
         
         mSearchText = findViewById(R.id.search_edit);
         msearchBtn = findViewById(R.id.search_btn);
