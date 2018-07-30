@@ -86,7 +86,7 @@ public class PaymentActivity extends AppCompatActivity {
             @Override
             public void run() {
                 try {
-                    thread.sleep(15000);
+                    thread.sleep(20000);
                     Intent i = new Intent(PaymentActivity.this,MainActivity.class);
                     i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(i);

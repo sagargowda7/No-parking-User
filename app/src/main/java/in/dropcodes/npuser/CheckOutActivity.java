@@ -105,6 +105,7 @@ public class CheckOutActivity extends AppCompatActivity implements ZXingScannerV
 
             Intent intent = new Intent(CheckOutActivity.this,PaymentActivity.class);
             intent.putExtra("uid",uid);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
             finish();
 

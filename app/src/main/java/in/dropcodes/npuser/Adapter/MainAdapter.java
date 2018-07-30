@@ -1,9 +1,15 @@
 package in.dropcodes.npuser.Adapter;
 
+import android.app.Activity;
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,7 +43,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder>{
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
 
         final MainModel model = mainModels.get(position);
         holder.mName.setText("Parking Name:"+" "+model.getName());
@@ -51,7 +57,16 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder>{
             public void onClick(View view) {
                 Intent intent = new Intent(context,ParkingDetailsActivity.class);
                 intent.putExtra("uid",uid);
-                context.startActivity(intent) ;
+
+                //adding Shared animation
+                Pair[] pairs = new Pair[4];
+                pairs[0]=new Pair<View , String>(holder.mImage,"ParkImage");
+                pairs[1]=new Pair<View , String>(holder.mName,"ParkName");
+                pairs[2]=new Pair<View , String>(holder.mPlace,"ParkAddress");
+                pairs[3]=new Pair<View , String>(holder.mCard,"ParkCard");
+
+                ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation((Activity) context,pairs);
+                context.startActivity(intent, options.toBundle()) ;
 
             }
         });
@@ -68,6 +83,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder>{
         public TextView mName, mPlace;
         public CircleImageView mImage;
         public LinearLayout mLinearLayout;
+        public CardView mCard;
 
 
         public ViewHolder(@NonNull View itemView) {
@@ -77,6 +93,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder>{
             mPlace = itemView.findViewById(R.id.parking_place);
             mImage = itemView.findViewById(R.id.parking_image);
             mLinearLayout = itemView.findViewById(R.id.linear_layout);
+            mCard = itemView.findViewById(R.id.card_view);
         }
     }
 }

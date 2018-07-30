@@ -27,11 +27,8 @@ public class SignUpActivity extends AppCompatActivity {
     public TextInputEditText mEmail,mPassword,mReEnterPassword;
     public Button mSignUp;
     public String email,password,rePassword;
-    public FirebaseAuth mAuth;
-    public DatabaseReference mReference;
     public ProgressDialog mProgress;
-    public FirebaseDatabase mDtabase;
-    public FirebaseUser mUser;
+    public FirebaseAuth mAuth;
     public String uid;
 
     @Override
@@ -75,17 +72,7 @@ public class SignUpActivity extends AppCompatActivity {
                             public void onComplete(@NonNull Task<AuthResult> task) {
 
                                 if (task.isSuccessful()){
-
-                                    mUser = mAuth.getCurrentUser();
-                                    mDtabase = FirebaseDatabase.getInstance();
-                                    uid = mUser.getUid();
-                                    mReference = mDtabase.getReference().child("parking").child(uid);
-                                    Map defaultData = new HashMap();
-                                    defaultData.put("name","");
-                                    defaultData.put("email",email);
-                                    defaultData.put("uid",uid);
-                                    mReference.updateChildren(defaultData);
-
+                              
                                     Intent signInIntent = new Intent(SignUpActivity.this, MainActivity.class);
                                     signInIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                     startActivity(signInIntent);

@@ -7,6 +7,7 @@
     app:cardElevation="10dp"
     android:layout_margin="5dp"
     android:id="@+id/card_view"
+    android:transitionName="ParkCard"
     app:cardBackgroundColor="@color/white"
     android:layout_height="wrap_content">
 
@@ -26,6 +27,7 @@
             android:id="@+id/parking_image"
             android:background="@color/white"
             android:src="@drawable/placeholder"
+            android:transitionName="ParkImage"
             android:layout_margin="5dp"
             android:layout_height="80dp" />
 
@@ -46,6 +48,7 @@
                 android:fontFamily="@font/nunito_sans_bold"
                 android:gravity="left"
                 android:text="Parking Name"
+                android:transitionName="ParkName"
                 android:textColor="@color/orange"
                 android:textSize="18dp" />
 
@@ -57,6 +60,7 @@
                 android:layout_margin="2dp"
                 android:textColor="@color/gray"
                 android:fontFamily="@font/nunito"
+                android:transitionName="ParkAddress"
                 android:id="@+id/parking_place"
                 android:textSize="14dp"
                 android:text="place"/>

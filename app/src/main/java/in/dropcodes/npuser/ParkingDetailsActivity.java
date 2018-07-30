@@ -65,52 +65,46 @@ public class ParkingDetailsActivity extends AppCompatActivity {
         mProgressDialog.setIcon(R.mipmap.ic_launcher_foreground);
         mProgressDialog.show();
 
-
         //Checking Network Exist
         if(!isConnected(ParkingDetailsActivity.this)) builderDialog(ParkingDetailsActivity.this).show();
         else {
 
-            //FireBaseReference
-            mReference.addValueEventListener(new ValueEventListener() {
+            //Check if data available
+            DatabaseReference CheckData = FirebaseDatabase.getInstance().getReference().child("parking");
+            CheckData.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                    String name = dataSnapshot.child("name").getValue().toString();
-                    String place = dataSnapshot.child("area").getValue().toString();
-                    Total = dataSnapshot.child("total").getValue().toString();
-                    Park = dataSnapshot.child("parked").getValue().toString();
-                    String image = dataSnapshot.child("image").getValue().toString();
+                    if (dataSnapshot.hasChild(uid)){
 
+                        getdata();
 
-                    mName.setText("Parking Name: " + name);
-                    mPlace.setText("Address: " + place);
-                    mTotal.setText("Total parking provided: " + Total);
-                    mPark.setText(" "+ Park);
-                    Picasso.get().load(image).fit().centerInside().placeholder(R.drawable.placeholder).into(mImage);
-
-
-                    //Making Check Out Button InVisible
-                    if (Park.equals(Total)){
-                        mCheckOut.setVisibility(View.INVISIBLE);
                     }else {
-                        mCheckOut.setVisibility(View.VISIBLE);
-                    }
-                    //Making Check In Button InVisible
-                    if (Park.equals("0")){
-                        mCheckIn.setVisibility(View.INVISIBLE);
-                        mPark.setText("0");
-                    }else {
-                        mCheckIn.setVisibility(View.VISIBLE);
+                        Toast.makeText(ParkingDetailsActivity.this, "No Data available", Toast.LENGTH_SHORT).show();
                     }
 
-                    mProgressDialog.dismiss();
                 }
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                    Toast.makeText(ParkingDetailsActivity.this, "There  was some error Please Check your Internet connection", Toast.LENGTH_SHORT).show();
-                    mProgressDialog.hide();
+                }
+            });
+
+            // Check if image available
+            CheckData.child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.hasChild("image")){
+                        String image = dataSnapshot.child("image").getValue().toString();
+                        Picasso.get().load(image).fit().centerInside().placeholder(R.drawable.placeholder).into(mImage);
+                    }
+
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
                 }
             });
 
@@ -140,6 +134,50 @@ public class ParkingDetailsActivity extends AppCompatActivity {
         });
     }
 
+    private void getdata()
+    {
+        //FireBaseReference
+        mReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                String name = dataSnapshot.child("name").getValue().toString();
+                String place = dataSnapshot.child("area").getValue().toString();
+                Total = dataSnapshot.child("total").getValue().toString();
+                Park = dataSnapshot.child("parked").getValue().toString();
+
+                mName.setText("Parking Name: " + name);
+                mPlace.setText("Address: " + place);
+                mTotal.setText("Total parking provided: " + Total);
+                mPark.setText(" "+ Park);
+
+
+                //Making Check Out Button InVisible
+                if (Park.equals(Total)){
+                    mCheckOut.setVisibility(View.INVISIBLE);
+                }else {
+                    mCheckOut.setVisibility(View.VISIBLE);
+                }
+                //Making Check In Button InVisible
+                if (Park.equals("0")){
+                    mCheckIn.setVisibility(View.INVISIBLE);
+                    mPark.setText("0");
+                }else {
+                    mCheckIn.setVisibility(View.VISIBLE);
+                }
+
+                mProgressDialog.dismiss();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                Toast.makeText(ParkingDetailsActivity.this, "There  was some error Please Check your Internet connection", Toast.LENGTH_SHORT).show();
+                mProgressDialog.hide();
+            }
+        });
+
+    }
 
     public boolean isConnected(Context context){
 
