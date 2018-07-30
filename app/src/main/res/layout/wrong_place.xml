@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:src="@drawable/ic_error"
+        android:id="@+id/img"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="You'r in wrong parking place"
+        android:textColor="@color/orange"
+        android:textSize="18sp"
+        android:textAllCaps="true"
+        android:layout_below="@id/img"
+        android:textStyle="bold"
+        android:id="@+id/tx"
+        android:gravity="center"
+        android:fontFamily="@font/nunito_bold"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Scan proper QR Code"
+        android:textColor="@color/gray"
+        android:textSize="16sp"
+        android:layout_below="@id/tx"
+        android:textAllCaps="true"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:fontFamily="@font/nunito"/>
+
+</RelativeLayout>

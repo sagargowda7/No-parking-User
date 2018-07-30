@@ -1,9 +1,13 @@
 package in.dropcodes.npuser;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -109,6 +113,23 @@ public class CheckOutActivity extends AppCompatActivity implements ZXingScannerV
             startActivity(intent);
             finish();
 
+
+        }else {
+
+
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(CheckOutActivity.this);
+            LayoutInflater inflater = LayoutInflater.from(CheckOutActivity.this);
+            View licenses_layout = inflater.inflate(R.layout.wrong_place, null);
+            alertDialog.setView(licenses_layout);
+            alertDialog.setTitle("Woops!");
+            alertDialog.setIcon(R.mipmap.ic_launcher_foreground);
+            alertDialog.setNegativeButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    dialogInterface.dismiss();
+                }
+            });
+            alertDialog.show();
 
         }
 
