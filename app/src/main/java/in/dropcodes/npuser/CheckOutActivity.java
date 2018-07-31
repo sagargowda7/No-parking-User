@@ -82,30 +82,31 @@ public class CheckOutActivity extends AppCompatActivity implements ZXingScannerV
 
             //Converting Hrs to Min
             int HrsToMin = hrsInt * 60;
-            int totalTime = minInt+ HrsToMin;
-            mUserRef.child("check_out_time").setValue(totalTime);
+            final int totalTime = minInt+ HrsToMin;
 
 
-            //FireBase
-            mReferenceR.addListenerForSingleValueEvent(new ValueEventListener() {
+            //checking if user already CheckIn
+            mUserRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.hasChild("check_in_time")){
+                        mUserRef.child("check_out_time").setValue(totalTime);
+                        getData();
+                    }else {
 
-                    values = dataSnapshot.child("parked").getValue().toString();
+                        Toast.makeText(CheckOutActivity.this, "You have not check In yet", Toast.LENGTH_SHORT).show();
 
-                    int v =Integer.parseInt(values);
-                    int vFinal = v + 1;
-                    String fin = String.valueOf(vFinal);
-                    mReferenceR.child("parked").setValue(fin);
-                    Toast.makeText(CheckOutActivity.this, "You are checked out", Toast.LENGTH_SHORT).show();
+                    }
 
                 }
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
 
+                    Toast.makeText(CheckOutActivity.this, databaseError.toString(), Toast.LENGTH_LONG).show();
                 }
             });
+
 
             Intent intent = new Intent(CheckOutActivity.this,PaymentActivity.class);
             intent.putExtra("uid",uid);
@@ -132,6 +133,30 @@ public class CheckOutActivity extends AppCompatActivity implements ZXingScannerV
             alertDialog.show();
 
         }
+
+    }
+
+    private void getData(){
+
+        mReferenceR.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                values = dataSnapshot.child("parked").getValue().toString();
+
+                int v =Integer.parseInt(values);
+                int vFinal = v + 1;
+                String fin = String.valueOf(vFinal);
+                mReferenceR.child("parked").setValue(fin);
+                Toast.makeText(CheckOutActivity.this, "You are checked out", Toast.LENGTH_SHORT).show();
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
     }
 

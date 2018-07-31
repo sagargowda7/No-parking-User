@@ -49,28 +49,32 @@ public class PaymentActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                checkIn = dataSnapshot.child("check_in_time").getValue().toString();
-                checkOut = dataSnapshot.child("check_out_time").getValue().toString();
+                if (dataSnapshot.hasChild("check_in_time") && dataSnapshot.hasChild("check_out_time")) {
 
-                //Converting time to int from string
-                int in = Integer.parseInt(checkIn);
-                int out = Integer.parseInt(checkOut);
-                int total = out -in;
-                String tot = String.valueOf(total);
-                mTime.setText("Your car was parked for: "+tot+" min");
+                    checkIn = dataSnapshot.child("check_in_time").getValue().toString();
+                    checkOut = dataSnapshot.child("check_out_time").getValue().toString();
 
-                //calculating cost for parking
-                if (total == 0){
-                    mCharge.setText("Parking charge: "+"RS 10");
-                }else {
-                    if (total > 240)
-                    {
-                        mCharge.setText("Parking charge: "+"RS 60");
-                    }else {
-                        mCharge.setText("Parking charge: "+"RS 40");
+                    //Converting time to int from string
+                    int in = Integer.parseInt(checkIn);
+                    int out = Integer.parseInt(checkOut);
+                    int total = out - in;
+                    String tot = String.valueOf(total);
+                    mTime.setText("Your car was parked for: " + tot + " min");
+
+                    //calculating cost for parking
+                    if (total == 0) {
+                        mCharge.setText("Parking charge: " + "RS 10");
+                    } else {
+                        if (total > 240) {
+                            mCharge.setText("Parking charge: " + "RS 60");
+                        } else {
+                            mCharge.setText("Parking charge: " + "RS 40");
+                        }
                     }
-                }
 
+                }else {
+                    Toast.makeText(PaymentActivity.this, "There is no LogIn record details ", Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override
@@ -80,14 +84,16 @@ public class PaymentActivity extends AppCompatActivity {
             }
         });
 
+
         //Handling threads
 
         thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    thread.sleep(20000);
-                    Intent i = new Intent(PaymentActivity.this,MainActivity.class);
+                    thread.sleep(5000);
+                    Intent i = new Intent(PaymentActivity.this,DeleteChildActivity.class);
+                    i.putExtra("uid",UID);
                     i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(i);
                     finish();
@@ -100,4 +106,5 @@ public class PaymentActivity extends AppCompatActivity {
 
 
     }
+
 }

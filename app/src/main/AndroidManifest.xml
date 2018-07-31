@@ -31,23 +31,25 @@
             android:screenOrientation="fullSensor"
             tools:replace="screenOrientation" />
         <activity android:name=".ParkingDetailsActivity" />
-        <activity android:name=".CheckInActivity"
-            android:theme="@style/AppThemeNO"/>
-        <activity android:name=".CheckOutActivity"
-            android:theme="@style/AppThemeNO"/>
+        <activity
+            android:name=".CheckInActivity"
+            android:theme="@style/AppThemeNO" />
+        <activity
+            android:name=".CheckOutActivity"
+            android:theme="@style/AppThemeNO" />
 
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
 
-        <activity
-            android:name=".SearchActivity" />
+        <activity android:name=".SearchActivity" />
         <activity android:name=".DeveloperActivity" />
         <activity android:name=".LogInheckActivity" />
         <activity android:name=".ChooseActivity" />
         <activity android:name=".SignInActivity" />
         <activity android:name=".SignUpActivity" />
-        <activity android:name=".PaymentActivity"></activity>
+        <activity android:name=".PaymentActivity" />
+        <activity android:name=".DeleteChildActivity"></activity>
     </application>
 
 </manifest>

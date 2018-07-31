@@ -87,30 +87,28 @@ public class CheckInActivity extends AppCompatActivity implements ZXingScannerVi
 
             //Converting Hrs to Min
             int HrsToMin = hrsInt * 60;
-            int totalTime = minInt+ HrsToMin;
-            mUserRef.child("check_in_time").setValue(totalTime);
+            final int totalTime = minInt+ HrsToMin;
 
-            mReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            //checking if user already CheckIn
+            mUserRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                    value = dataSnapshot.child("parked").getValue().toString();
-                    int vValue =Integer.parseInt(value);
-                    int vFinal = vValue - 1;
-                    String fin = String.valueOf(vFinal);
-                    mReference.child("parked").setValue(fin);
-                    Toast.makeText(CheckInActivity.this, "You are checked in", Toast.LENGTH_SHORT).show();
-                    finish();
+                    if (dataSnapshot.hasChild("check_in_time")){
+                        Toast.makeText(CheckInActivity.this, "You already Checked In", Toast.LENGTH_LONG).show();
+                    }else {
+                        mUserRef.child("check_in_time").setValue(totalTime);
+                        changeParkingTotal();
+                    }
 
                 }
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                    Toast.makeText(CheckInActivity.this,"There was some error ",Toast.LENGTH_LONG).show();
-
+                    Toast.makeText(CheckInActivity.this, databaseError.toString(), Toast.LENGTH_LONG).show();
                 }
             });
+
 
             Intent intent =new Intent(CheckInActivity.this,MainActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -135,6 +133,32 @@ public class CheckInActivity extends AppCompatActivity implements ZXingScannerVi
             alertDialog.show();
 
         }
+
+    }
+
+    private void changeParkingTotal() {
+
+        mReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                value = dataSnapshot.child("parked").getValue().toString();
+                int vValue =Integer.parseInt(value);
+                int vFinal = vValue - 1;
+                String fin = String.valueOf(vFinal);
+                mReference.child("parked").setValue(fin);
+                Toast.makeText(CheckInActivity.this, "You are checked in", Toast.LENGTH_SHORT).show();
+
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                Toast.makeText(CheckInActivity.this,"There was some error ",Toast.LENGTH_LONG).show();
+
+            }
+        });
 
     }
 
