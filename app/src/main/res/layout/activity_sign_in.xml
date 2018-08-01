@@ -83,7 +83,7 @@
                 android:fontFamily="@font/nunito_bold"
                 android:background="@drawable/button_background"
                 android:text="Log In"
-                android:textColor="@color/gray" />
+                android:textColor="@color/orange" />
 
             <Button
                 android:id="@+id/forgot_password_btn"

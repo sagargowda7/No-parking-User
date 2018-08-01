@@ -49,7 +49,7 @@
         <activity android:name=".SignInActivity" />
         <activity android:name=".SignUpActivity" />
         <activity android:name=".PaymentActivity" />
-        <activity android:name=".DeleteChildActivity"></activity>
+        <activity android:name=".DeleteChildActivity" />
     </application>
 
 </manifest>

@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
     public MainAdapter adapter;
     public DatabaseReference mDatabaseReference;
     public List<MainModel> mainModels;
+    public ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,10 +48,11 @@ public class MainActivity extends AppCompatActivity {
         mRecycler = findViewById(R.id.recycler_view);
         mRecycler.setHasFixedSize(true);
         mRecycler.setLayoutManager(new LinearLayoutManager(this));
+        mDatabaseReference = FirebaseDatabase.getInstance().getReference();
 
         mainModels = new ArrayList<>();
 
-        final ProgressDialog progressDialog = new ProgressDialog(MainActivity.this);
+        progressDialog = new ProgressDialog(MainActivity.this);
         progressDialog.setTitle("Fetching data ");
         progressDialog.setMessage("Please wait...");
         progressDialog.setCanceledOnTouchOutside(false);
@@ -75,30 +77,54 @@ public class MainActivity extends AppCompatActivity {
         if (!isConnected(MainActivity.this)) builderDialog(MainActivity.this).show();
         else {
 
-            mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("parking");
-            mDatabaseReference.addValueEventListener(new ValueEventListener() {
+
+            mDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                    for (DataSnapshot parkingsnapshot : dataSnapshot.getChildren()) {
-                        MainModel model = parkingsnapshot.getValue(MainModel.class);
-                        mainModels.add(model);
+                    if (dataSnapshot.equals("null")){
+
+                        Toast.makeText(MainActivity.this,"No Parking Place found",Toast.LENGTH_LONG).show();
+
+                    }else {
+                        getData();
                     }
-                    adapter = new MainAdapter(MainActivity.this, mainModels);
-                    adapter.notifyDataSetChanged();
-                    mRecycler.setAdapter(adapter);
-                    progressDialog.dismiss();
 
                 }
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
-                    Toast.makeText(MainActivity.this, "Error while fetching data. Please check your internet connection", Toast.LENGTH_LONG).show();
-                    progressDialog.hide();
+
                 }
             });
 
         }
+    }
+
+    private void getData(){
+
+        mDatabaseReference.child("parking").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                for (DataSnapshot parkingsnapshot : dataSnapshot.getChildren()) {
+                    MainModel model = parkingsnapshot.getValue(MainModel.class);
+                    mainModels.add(model);
+                }
+                adapter = new MainAdapter(MainActivity.this, mainModels);
+                adapter.notifyDataSetChanged();
+                mRecycler.setAdapter(adapter);
+                progressDialog.dismiss();
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(MainActivity.this, "Error while fetching data. Please check your internet connection", Toast.LENGTH_LONG).show();
+                progressDialog.hide();
+            }
+        });
+
     }
 
     @Override
