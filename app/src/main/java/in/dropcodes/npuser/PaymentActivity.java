@@ -59,7 +59,7 @@ public class PaymentActivity extends AppCompatActivity {
                     int out = Integer.parseInt(checkOut);
                     int total = out - in;
                     String tot = String.valueOf(total);
-                    mTime.setText("Your car was parked for: " + tot + " min");
+                    mTime.setText("Your vehicle was parked for: " + tot + " min");
 
                     //calculating cost for parking
                     if (total == 0) {
